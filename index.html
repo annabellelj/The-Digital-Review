@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Article Template</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Libre+Franklin:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="masthead">
+        <p class="masthead-kicker">Monday Feature</p>
+        <div class="masthead-rule"></div>
+        <p class="masthead-paper">The Digital Review</p>
+      </header>
+
+      <main class="article-layout">
+        <article class="story">
+          <header class="story-header">
+            <p class="story-section">Science</p>
+            <h1>Reach for the Spheres: A New Geometric Perspective on 3D Reconstruction</h1>
+            <p class="story-deck">
+              Traditional isosurfacing methods like Marching Cubes often oversmooth 3D
+              reconstructions. A newer method, "Reach For the Spheres," aims to preserve
+              geometric detail by treating signed distance field samples as spheres.
+            </p>
+            <div class="story-meta">
+              <p>By Annabelle Jiang</p>
+              <p>March 2, 2026</p>
+              <p>5 min read</p>
+            </div>
+          </header>
+
+          <figure class="hero-media">
+            <div class="hero-carousel" id="hero-carousel" tabindex="0" aria-label="Cover image gallery">
+              <button class="carousel-arrow carousel-arrow--prev" type="button" id="hero-prev" aria-label="Previous image">
+                &#8249;
+              </button>
+              <img
+                class="hero-image"
+                id="hero-image"
+                src="./Screenshot 2026-03-02 at 12.47.00 PM.png"
+                alt="Comparison figure showing marching cubes, NDCx, and the paper's method on low- and high-resolution signed distance field grids."
+              />
+              <button class="carousel-arrow carousel-arrow--next" type="button" id="hero-next" aria-label="Next image">
+                &#8250;
+              </button>
+            </div>
+            <div class="carousel-dots" id="hero-dots" aria-label="Select cover image"></div>
+            <figcaption>
+              <span id="hero-caption">
+                Comparison figure from Sellán, Batty, and Stein, “Reach for the Spheres:
+                Tangency-Aware Surface Reconstruction of SDFs,” presented at SIGGRAPH Asia 2023.
+              </span>
+            </figcaption>
+          </figure>
+
+          <section class="story-body">
+            <p class="lead">
+              Traditional isosurfacing techniques, such as Marching Cubes, often oversmooth sharp features in 3D reconstructions because they view signed distance fields (SDFs) as generic scalar data rather than as geometric objects. A new approach by <a href="https://www.cs.columbia.edu/~silviasellan/" target="_blank" rel="noreferrer">Silvia Sellán</a>, <a href="https://cs.uwaterloo.ca/~c2batty/" target="_blank" rel="noreferrer">Christopher Batty</a>, and <a href="https://odedstein.com/" target="_blank" rel="noreferrer">Oded Stein</a> addresses this by treating each SDF sample as a sphere and extracting geometric information that traditional methods overlook. A signed distance field is a mathematical representation of a 3D shape in which each point in space stores its distance to the nearest surface. The value carries a sign: positive if outside the object, negative if inside.
+            </p>
+
+            <p>
+              Signed distance fields are widely used for representing 3D surfaces, but extracting detailed meshes remains a long-standing challenge. Previous approaches have improved surface reconstruction methods, but oversmoothing and feature loss were common issues. This paper approaches challenges by assigning spherical regions to each SDF sample. These spherical regions are defined by signs that indicate whether the sphere lies inside or outside the surface, and these regions must be tangent to the surface.
+            </p>
+
+            <p>
+              “Marching Cubes only look at local neighborhoods...but if you're willing to look much further, at other sample points, you can actually get a lot more information and get a better reconstruction,” said Silvia Sellán, an Assistant Professor in the Computer Science Department at Columbia University and the first author of this paper.
+            </p>
+
+            <p>
+              Marching Cubes examines SDF values one cube at a time. Sellán and collaborators interpreted each data point as a sphere. They formulated the reconstruction as an energy-minimization problem over the entire surface. Starting from an initial surface, the algorithm moves it in the direction that reduces this energy at each step. This continues until the surface satisfies all tangency constraints to every sphere. The researchers named it sphere reaching flow. Each iteration includes a remeshing step to maintain the triangle quality.
+            </p>
+
+            <figure class="inline-media">
+              <img
+                class="article-image"
+                src="./Screenshot 2026-03-02 at 12.41.12 PM.png"
+                alt="Diagram contrasting a best fit in each voxel with a global solution that satisfies all spheres."
+              />
+              <figcaption>
+                Diagram illustrating local voxel fitting versus a surface satisfying the full
+                sphere constraints, from Sellán, Batty, and Stein, “Reach for the Spheres:
+                Tangency-Aware Surface Reconstruction of SDFs.”
+              </figcaption>
+            </figure>
+
+            <p>
+              The method excels on low-resolution SDF grids, where exploiting all sample points globally recovers detail that Marching Cubes misses. At high resolution, results remain competitive with other methods. It consistently outperforms Marching Cubes over several evaluations. The “Reach For the Spheres” method could also be applied to unsigned distance fields, which Marching Cubes struggles to handle.
+            </p>
+
+            <figure class="inline-media">
+              <img
+                class="article-image article-image--narrow"
+                src="./Screenshot 2026-03-02 at 12.40.45 PM.png"
+                alt="Small comparison figure showing source, marching cubes, and the paper's reconstruction results."
+              />
+              <figcaption>
+                Additional reconstruction comparison from Sellán, Batty, and Stein, “Reach for
+                the Spheres: Tangency-Aware Surface Reconstruction of SDFs.”
+              </figcaption>
+            </figure>
+
+            <p>
+              “There have been improvements to Marching Cubes over the years, but all kind of incremental in terms of the gross surface output quality. “Reach For the Spheres” is the first paper that takes the same input and produces dramatically better output,” said Alec Jacobson, an Associate Professor and Canada Research Chair in the Departments of Computer Science and Mathematics at the University of Toronto, who was not involved in the paper.
+            </p>
+
+            <p>
+              The implications extend across fields that rely on accurate 3D reconstruction, including medical imaging, robotic path planning, visual effects, and game development. The paper was published when the field was dominated by network-based approaches, making it notable for achieving competitive results, and at low resolutions, superior results, through pure geometry alone, with no training data and no stored network weights. Eitan Grinspun, a professor at the University of Toronto, commented, “A signed distance field is not just a scalar function waiting to be sliced, but a rich geometric object whispering, at every sample, both how far and which way.”
+            </p>
+
+            <p>
+              However, improvements are still needed. The method does not support topology changes or self-intersections, a significant constraint. "It has the limitation that it has to be the same topology, the input as the output, the first step of the flow to the last step of the flow, has to be the same topology. So that immediately means that you cannot use it for 99% of the time that you use Marching Cubes," said Sellán. The method is also sensitive to noise in the SDF input. Marching Cubes is more flexible topologically, but handles low-resolution grids poorly, resulting in significantly lower reconstruction quality.
+            </p>
+
+            <p>
+              Despite the limitations, this new approach has given the field a new perspective. "'Reach for the Spheres' provides us with new insights and a new perspective on SDF-based reconstruction that I think will be very useful and inspiring in future work," said Olga Sorkine-Hornung, a professor of Computer Science at ETH Zurich who was not involved in the paper.
+            </p>
+
+            <p>
+              Joining Sellán on the paper are <a href="https://cs.uwaterloo.ca/~c2batty/" target="_blank" rel="noreferrer">Christopher Batty</a>, an assistant professor of the David R. Cheriton School of Computer Science at the University of Waterloo, and <a href="https://odedstein.com/" target="_blank" rel="noreferrer">Oded Stein</a>, an assistant professor at the University of Southern California's Viterbi School of Engineering. This paper was presented at SIGGRAPH Asia 2023.
+            </p>
+
+            <p>
+              This research is funded, in part, by the Natural Sciences and Engineering Research Council of Canada, an NSERC Vanier Scholarship, and an Adobe Research Fellowship.
+            </p>
+          </section>
+        </article>
+
+        <aside class="sidebar">
+          <section class="sidebar-card">
+            <p class="sidebar-label">Editor’s Note</p>
+            <p>
+              There's another article called <a href="https://odedstein.com/projects/reach-for-the-arcs/" target="_blank" rel="noreferrer">Reach For the Arcs</a>
+            </p>
+          </section>
+
+          <section class="sidebar-card">
+            <p class="sidebar-label">Fast Facts</p>
+            <ul class="fact-list">
+              <li>The idea started here as a blog post by Christopher Batty <a href="https://www.physicsbasedanimation.com/" target="_blank" rel="noreferrer">here</a></li>
+            </ul>
+          </section>
+
+          <section class="sidebar-card">
+            <p class="sidebar-label">Related Links</p>
+            <ul class="fact-list">
+              <li><a href="https://odedstein.com/projects/reach-for-the-arcs/" target="_blank" rel="noreferrer">Reach For the Arcs</a></li>
+              <li><a href="https://www.physicsbasedanimation.com/" target="_blank" rel="noreferrer">Christopher Batty's blog</a></li>
+              <li><a href="https://www.cs.columbia.edu/~silviasellan/" target="_blank" rel="noreferrer">Silvia Sellán</a></li>
+              <li><a href="https://cs.uwaterloo.ca/~c2batty/" target="_blank" rel="noreferrer">Christopher Batty</a></li>
+              <li><a href="https://odedstein.com/" target="_blank" rel="noreferrer">Oded Stein</a></li>
+              <li><a href="https://scholar.google.com/citations?user=lSJavJUAAAAJ&hl=en" target="_blank" rel="noreferrer">Alec Jacobson Scholar</a></li>
+              <li><a href="https://scholar.google.ch/citations?user=GBU568oAAAAJ&hl=en" target="_blank" rel="noreferrer">Olga Sorkine-Hornung Scholar</a></li>
+              <li><a href="https://scholar.google.com/citations?user=-HyEryoAAAAJ&hl=en" target="_blank" rel="noreferrer">Eitan Grinspun Scholar</a></li>
+            </ul>
+          </section>
+        </aside>
+      </main>
+
+      <section class="comments" aria-labelledby="comments-title">
+        <div class="comments-header">
+          <div>
+            <p class="comments-label">Reader Discussion</p>
+            <h2 id="comments-title">Comments</h2>
+          </div>
+          <p class="comments-count"><span id="comment-count">3</span> comments</p>
+        </div>
+
+        <form class="comment-form" id="comment-form">
+          <label>
+            Name
+            <input id="comment-name" name="name" type="text" maxlength="40" required />
+          </label>
+          <label>
+            Comment
+            <textarea
+              id="comment-text"
+              name="comment"
+              rows="4"
+              maxlength="500"
+              required
+            ></textarea>
+          </label>
+          <button type="submit">Post Comment</button>
+        </form>
+
+        <div class="comment-list" id="comment-list">
+          <article class="comment">
+            <div class="comment-head">
+              <strong><a href="https://scholar.google.com/citations?user=lSJavJUAAAAJ&hl=en" target="_blank" rel="noreferrer">Alec Jacobson</a></strong>
+              <span>Feb 25, 2026</span>
+            </div>
+            <p>
+              Marching cubes from 1987 is easily one of the most successful results in computer
+              graphics of all time. I believe it is still the most cited SIGGRAPH paper.
+              Marching cubes takes as input a grid where each node stores the distance to a
+              possibly unknown surface, its output is a surface mesh where distance is zero
+              (where the surface is). There have been improvements to Marching Cubes over the
+              years, but all kind of incremental in terms of the gross surface output quality.
+              Reach for the spheres is the first paper that takes the same input and produces
+              dramatically better output. It's key insight is that even distance grids nodes
+              contain useful information about the surface. I first saw Christopher Batty's blog
+              post about this a few years before the Reach for the Spheres collaboration, but it
+              didn't have all the pieces put together to make a full algorithm.
+            </p>
+            <p>
+              The followups to Reach for the Spheres have improved some of its weaknesses, in
+              terms of the fragile flow part and the locked topology. My opinion is that the
+              major lingering limitation is not really the algorithm, but the assumption about
+              the input. There are indeed circumstances where data arrives already on a grid and
+              you're not able to sample more. However, many interesting applications have as
+              input an arbitrary function handle as input and the goal would be to get the best
+              surface output with the fewest function calls, even if they're off the grid. Naive
+              solutions like lipschitz-octrees are already quite good baselines and compared to
+              dense grids + Reach for Spheres produce significantly higher-resolution output.
+            </p>
+          </article>
+          <article class="comment">
+            <div class="comment-head">
+              <strong><a href="https://scholar.google.ch/citations?user=GBU568oAAAAJ&hl=en" target="_blank" rel="noreferrer">Olga Sorkine-Hornung</a></strong>
+              <span>Quoted Response</span>
+            </div>
+            <p>
+              The line of work you mention (with this particular paper being one example in a
+              series of works by Silvia and collaborators) has been one of the highlights in
+              geometry processing for me in recent years. It is a surprising work, in that it
+              revisits and rethinks a very well established classical method of Marching Cubes
+              and offers an alternative. Since Marching Cubes is so fundamental (and so old by
+              now!), it was unexpected for me to see something new and refreshing in this area. I
+              would compare it to somebody inventing a new way of doing hidden surface removal
+              since the Z-buffer! Now, the practicality of MC is hard to beat -- it is a very
+              efficient algorithm that is simple to implement, standard implementations are very
+              widespread, and I doubt it will be dethroned by newer work very soon. However,
+              "Reach for the spheres" provides us with new insights and a new perspective on SDF
+              based reconstruction that I think will be very useful and inspiring in future work.
+            </p>
+          </article>
+          <article class="comment">
+            <div class="comment-head">
+              <strong><a href="https://scholar.google.com/citations?user=-HyEryoAAAAJ&hl=en" target="_blank" rel="noreferrer">Eitan Grinspun</a></strong>
+              <span>Quoted Response</span>
+            </div>
+            <p>
+              What a lovely paper to write about. There is something deeply satisfying about the
+              central idea — that a signed distance field is not just a scalar function waiting
+              to be sliced, but a rich geometric object whispering, at every sample, both how far
+              and which way. The paper listens to that whisper. By honoring the tangency encoded
+              in the gradient, it trades the brute force of dense isosurfacing for something more
+              economical and, to my eye, more beautiful: a reconstruction that respects the
+              geometry already present in the data rather than bulldozing over it with a grid.
+            </p>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
