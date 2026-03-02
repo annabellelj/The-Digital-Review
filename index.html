@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Article Template</title>
+    <title>Reach for the Spheres: A New Geometric Perspective on 3D Reconstruction</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -63,19 +63,27 @@
 
           <section class="story-body">
             <p class="lead">
-              Traditional isosurfacing techniques, such as Marching Cubes, often oversmooth sharp features in 3D reconstructions because they view signed distance fields (SDFs) as generic scalar data rather than as geometric objects. A new approach by <a href="https://www.cs.columbia.edu/~silviasellan/" target="_blank" rel="noreferrer">Silvia Sellán</a>, <a href="https://cs.uwaterloo.ca/~c2batty/" target="_blank" rel="noreferrer">Christopher Batty</a>, and <a href="https://odedstein.com/" target="_blank" rel="noreferrer">Oded Stein</a> addresses this by treating each SDF sample as a sphere and extracting geometric information that traditional methods overlook. A signed distance field is a mathematical representation of a 3D shape in which each point in space stores its distance to the nearest surface. The value carries a sign: positive if outside the object, negative if inside.
+              Traditional isosurfacing techniques, such as Marching Cubes, often oversmooth sharp features in 3D reconstructions because they view signed distance fields (SDFs) as generic scalar data rather than as geometric objects. A new approach by <a href="https://www.cs.columbia.edu/~silviasellan/" target="_blank" rel="noreferrer">Silvia Sellán</a>, <a href="https://cs.uwaterloo.ca/~c2batty/" target="_blank" rel="noreferrer">Christopher Batty</a>, and <a href="https://odedstein.com/" target="_blank" rel="noreferrer">Oded Stein</a> addresses this by treating each SDF sample as a sphere and extracting geometric information that traditional methods overlook.
             </p>
 
             <p>
-              Signed distance fields are widely used for representing 3D surfaces, but extracting detailed meshes remains a long-standing challenge. Previous approaches have improved surface reconstruction methods, but oversmoothing and feature loss were common issues. This paper approaches challenges by assigning spherical regions to each SDF sample. These spherical regions are defined by signs that indicate whether the sphere lies inside or outside the surface, and these regions must be tangent to the surface.
+              A signed distance field is a mathematical representation of a 3D shape in which each point in space stores its distance to the nearest surface. The value carries a sign: positive if outside the object, negative if inside. Signed distance fields are widely used for representing 3D surfaces, but extracting detailed meshes remains a long-standing challenge. Previous approaches have improved surface reconstruction methods, but oversmoothing and feature loss were common issues.
             </p>
 
             <p>
-              “Marching Cubes only look at local neighborhoods...but if you're willing to look much further, at other sample points, you can actually get a lot more information and get a better reconstruction,” said Silvia Sellán, an Assistant Professor in the Computer Science Department at Columbia University and the first author of this paper.
+              This paper introduces a new geometric interpretation in which each SDF sample defines a sphere, centered at the sample point, with a radius equal to the absolute value of the distance. By the fundamental property of signed distance fields, each of these spheres is exactly tangent to the surface at its closest point. The method then finds the surface that is simultaneously tangent to all of these spheres, recovering sharp features that traditional methods smooth over.
             </p>
 
             <p>
-              Marching Cubes examines SDF values one cube at a time. Sellán and collaborators interpreted each data point as a sphere. They formulated the reconstruction as an energy-minimization problem over the entire surface. Starting from an initial surface, the algorithm moves it in the direction that reduces this energy at each step. This continues until the surface satisfies all tangency constraints to every sphere. The researchers named it sphere reaching flow. Each iteration includes a remeshing step to maintain the triangle quality.
+              “Marching Cubes only look at local neighborhoods...but if you're willing to look much further, at other sample points, you can actually get a lot more information and get a better reconstruction,” said Silvia Sellán.
+            </p>
+
+            <blockquote class="pull-quote">
+              “Marching Cubes only look at local neighborhoods...but if you're willing to look much further, at other sample points, you can actually get a lot more information and get a better reconstruction,”
+            </blockquote>
+
+            <p>
+              Marching Cubes examines SDF values one cube at a time. Sellán and collaborators instead interpreted each data point as a sphere and formulated the reconstruction as an energy-minimization problem over the entire surface. Starting from an initial surface, the algorithm moves it in the direction that reduces this energy at each step. This continues until the surface satisfies all tangency constraints with every sphere. The researchers named it 'sphere reaching flow'. Each iteration includes a remeshing step to maintain triangle quality.
             </p>
 
             <figure class="inline-media">
@@ -85,9 +93,11 @@
                 alt="Diagram contrasting a best fit in each voxel with a global solution that satisfies all spheres."
               />
               <figcaption>
-                Diagram illustrating local voxel fitting versus a surface satisfying the full
-                sphere constraints, from Sellán, Batty, and Stein, “Reach for the Spheres:
-                Tangency-Aware Surface Reconstruction of SDFs.”
+                Reconstructing an SDF per-voxel, by finding a best fit line segment in each voxel
+                containing both positive (red) and negative (blue) values, discards much of the
+                available global information. Our main insight is that a solution adhering to the
+                constraints of all spheres yields better results. From Sellán, Batty, and Stein,
+                “Reach for the Spheres: Tangency-Aware Surface Reconstruction of SDFs.”
               </figcaption>
             </figure>
 
@@ -114,6 +124,10 @@
             <p>
               The implications extend across fields that rely on accurate 3D reconstruction, including medical imaging, robotic path planning, visual effects, and game development. The paper was published when the field was dominated by network-based approaches, making it notable for achieving competitive results, and at low resolutions, superior results, through pure geometry alone, with no training data and no stored network weights. Eitan Grinspun, a professor at the University of Toronto, commented, “A signed distance field is not just a scalar function waiting to be sliced, but a rich geometric object whispering, at every sample, both how far and which way.”
             </p>
+
+            <blockquote class="pull-quote">
+              “A signed distance field is not just a scalar function waiting to be sliced, but a rich geometric object whispering, at every sample, both how far and which way.”
+            </blockquote>
 
             <p>
               However, improvements are still needed. The method does not support topology changes or self-intersections, a significant constraint. "It has the limitation that it has to be the same topology, the input as the output, the first step of the flow to the last step of the flow, has to be the same topology. So that immediately means that you cannot use it for 99% of the time that you use Marching Cubes," said Sellán. The method is also sensitive to noise in the SDF input. Marching Cubes is more flexible topologically, but handles low-resolution grids poorly, resulting in significantly lower reconstruction quality.
@@ -144,21 +158,19 @@
           <section class="sidebar-card">
             <p class="sidebar-label">Fast Facts</p>
             <ul class="fact-list">
-              <li>The idea started here as a blog post by Christopher Batty <a href="https://www.physicsbasedanimation.com/" target="_blank" rel="noreferrer">here</a></li>
+              <li>The idea started as a blog post by Christopher Batty. Read more about it <a href="https://www.physicsbasedanimation.com/" target="_blank" rel="noreferrer">here</a></li>
             </ul>
           </section>
 
           <section class="sidebar-card">
             <p class="sidebar-label">Related Links</p>
             <ul class="fact-list">
+              <li><a href="https://dl.acm.org/doi/10.1145/3610548.3618196" target="_blank" rel="noreferrer">Reach For the Spheres</a></li>
               <li><a href="https://odedstein.com/projects/reach-for-the-arcs/" target="_blank" rel="noreferrer">Reach For the Arcs</a></li>
               <li><a href="https://www.physicsbasedanimation.com/" target="_blank" rel="noreferrer">Christopher Batty's blog</a></li>
               <li><a href="https://www.cs.columbia.edu/~silviasellan/" target="_blank" rel="noreferrer">Silvia Sellán</a></li>
               <li><a href="https://cs.uwaterloo.ca/~c2batty/" target="_blank" rel="noreferrer">Christopher Batty</a></li>
               <li><a href="https://odedstein.com/" target="_blank" rel="noreferrer">Oded Stein</a></li>
-              <li><a href="https://scholar.google.com/citations?user=lSJavJUAAAAJ&hl=en" target="_blank" rel="noreferrer">Alec Jacobson Scholar</a></li>
-              <li><a href="https://scholar.google.ch/citations?user=GBU568oAAAAJ&hl=en" target="_blank" rel="noreferrer">Olga Sorkine-Hornung Scholar</a></li>
-              <li><a href="https://scholar.google.com/citations?user=-HyEryoAAAAJ&hl=en" target="_blank" rel="noreferrer">Eitan Grinspun Scholar</a></li>
             </ul>
           </section>
         </aside>
